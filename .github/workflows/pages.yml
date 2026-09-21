@@ -64,8 +64,11 @@ jobs:
               s=s.replace('</body>',tag+'</body>')
           p.write_text(s,encoding='utf-8')
           PY
-      - name: Build cross-chapter glossary
-        run: python3 tools/build_glossary.py
+      - name: Build study indexes
+        shell: bash
+        run: |
+          python3 tools/build_glossary.py
+          python3 tools/build_entries.py
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload static site
