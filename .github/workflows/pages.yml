@@ -29,13 +29,14 @@ jobs:
           set -euo pipefail
           while IFS= read -r -d '' src; do
             dir="$(dirname "$src")"
-            if [ -f "$src.part2" ]; then
-              cat "$src" "$src.part2" | base64 -d | gzip -dc > "$dir/learn.html"
-              rm "$src" "$src.part2"
-            else
-              base64 -d "$src" | gzip -dc > "$dir/learn.html"
-              rm "$src"
-            fi
+            parts=("$src")
+            n=2
+            while [ -f "$src.part$n" ]; do
+              parts+=("$src.part$n")
+              n=$((n+1))
+            done
+            cat "${parts[@]}" | base64 -d | gzip -dc > "$dir/learn.html"
+            rm "${parts[@]}"
           done < <(find . -path './chapter*/learn.html.gz.b64' -print0)
       - name: Inject learning enhancements
         shell: bash
