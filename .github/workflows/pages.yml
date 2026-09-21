@@ -137,6 +137,66 @@ jobs:
 
           print('Pre-deploy integrity checks passed for chapters 21-25.')
           PY
+      - name: Static asset and link checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          # 1. All site JS must parse cleanly.
+          for f in assets/*.js; do node --check "$f"; done
+          echo "JS syntax OK"
+          python3 - <<'PY'
+          import pathlib, re, sys
+
+          errors = []
+          root = pathlib.Path('.')
+
+          # 2. gzip shard continuity: part numbering must be continuous
+          #    with no gaps and no orphaned extra parts.
+          for n in range(21, 26):
+              d = root / f'chapter{n}'
+              base = d / 'learn.html.gz.b64'
+              if base.exists():
+                  k = 1
+                  while (d / f'learn.html.gz.b64.part{k+1}').exists():
+                      k += 1
+                  for extra in d.glob('learn.html.gz.b64.part*'):
+                      m = re.fullmatch(r'learn\.html\.gz\.b64\.part(\d+)', extra.name)
+                      if m and int(m.group(1)) > k:
+                          errors.append(f'orphaned shard {extra}')
+                  print(f'chapter{n}: {k} shard(s) continuous')
+              elif (d / 'learn.html').exists():
+                  print(f'chapter{n}: plain learn.html (no shards)')
+              else:
+                  errors.append(f'chapter{n}: neither learn.html nor shards found')
+
+          # 3. Internal ../assets/* references must resolve; no asset injected twice.
+          # 4. Same-page #fragment links must resolve to an id in that page.
+          for n in range(21, 26):
+              page = root / f'chapter{n}' / 'learn.html'
+              if not page.exists():
+                  continue
+              text = page.read_text(encoding='utf-8')
+              for ref in sorted(set(re.findall(r'''(?:src|href)="(\.\./assets/[^"]+)"''', text))):
+                  target = (page.parent / ref).resolve()
+                  if not target.exists():
+                      errors.append(f'{page}: broken asset reference {ref}')
+              for asset in ['enhance.js', 'upgrade2.js', 'relations.js',
+                            'enhance.css', 'upgrade2.css', f'audit{n}.js']:
+                  c = text.count(f'../assets/{asset}')
+                  if c > 1:
+                      errors.append(f'{page}: duplicate injection of ../assets/{asset} x{c}')
+              ids = set(re.findall(r'id="([^"]+)"', text))
+              for frag in sorted(set(re.findall(r'href="#([^"]+)"', text))):
+                  if frag not in ids:
+                      errors.append(f'{page}: dead anchor #{frag}')
+
+          if errors:
+              print('STATIC CHECK FAILED')
+              for e in errors:
+                  print(f'::error::{e}')
+              sys.exit(1)
+          print('Static asset and link checks passed.')
+          PY
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload static site
