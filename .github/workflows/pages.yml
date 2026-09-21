@@ -44,12 +44,18 @@ jobs:
           p=pathlib.Path(sys.argv[1])
           s=p.read_text(encoding='utf-8')
           css='<link rel="stylesheet" href="../assets/enhance.css">'
+          css2='<link rel="stylesheet" href="../assets/upgrade2.css">'
           js='<script src="../assets/enhance.js"></script>'
+          js2='<script src="../assets/upgrade2.js"></script>'
           rel='<script src="../assets/relations.js"></script>'
           if 'assets/enhance.css' not in s:
               s=s.replace('</head>',css+'</head>')
+          if 'assets/upgrade2.css' not in s:
+              s=s.replace('</head>',css2+'</head>')
           if 'assets/enhance.js' not in s:
               s=s.replace('</body>',js+'</body>')
+          if 'assets/upgrade2.js' not in s:
+              s=s.replace('</body>',js2+'</body>')
           if 'assets/relations.js' not in s:
               s=s.replace('</body>',rel+'</body>')
           p.write_text(s,encoding='utf-8')
