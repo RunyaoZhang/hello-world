@@ -41,4 +41,29 @@
   const s=document.createElement('section'); s.className='audit25-core';
   s.innerHTML=`<div class="kicker">PDF 完整性补漏</div><h2>民非会计最核心：钱是谁给的、有没有外部限制、你是受赠人还是只是中转人</h2>${blocks.length?`<div class="map2-grid">${blocks.join('')}</div>`:''}${entries.join('')}`;
   anchor.insertAdjacentElement('afterend',s);
+
+  // audit25-deep-map: PDF table rules that are easy to lose in extraction.
+  {
+    const x=document.createElement('section'); x.className='audit25-deep-map';
+    x.innerHTML=`
+      <div class="kicker">逐页复核补齐 · 判断顺序</div>
+      <h2>捐赠题只按 4 个问题走：收到什么 → 怎么计量 → 有没有限制 → 谁真正受益</h2>
+      <div class="map2-grid">
+        <div class="map2-step"><b>捐赠和捐赠承诺先分开</b><span>捐赠是无偿转让现金或其他资产，或无偿清偿/取消受赠人的负债；捐赠承诺只是书面协议或口头约定。承诺本身不满足非交换交易收入确认条件，不确认收入，但按规定在附注披露。</span></div>
+        <div class="map2-step"><b>受赠资产的计量顺序</b><span>现金按实收金额；股权按合法有效的捐赠票据等凭据金额。其他非现金资产优先用凭据金额；无凭据或凭据金额与公允价值相差较大时用公允价值。固定资产、无形资产等既无凭据又无法可靠计量公允价值时按名义金额人民币 1 元；文物资源无凭据时也按名义金额。服务捐赠只有凭据金额能够反映服务公允价值时才确认。</span></div>
+        <div class="map2-step"><b>延期退还：为什么“谁的原因”决定借方</b><span>因捐赠方、法律法规等民非组织之外的原因需要偿还捐赠资产或款项：借“捐赠收入”，贷“其他应付款”等；因民非组织自身原因产生现时义务：借“管理费用”，贷“其他应付款”。同样是退款，经济实质不同。</span></div>
+        <div class="map2-step"><b>同一期间内限制就会完全解除</b><span>如果限定性捐赠收入的限制在确认收入的当期预计就会完全解除，课件直接在收入内部重分类：借“捐赠收入—限定性收入”，贷“捐赠收入—非限定性收入”。这和期末以后“借限定性净资产、贷非限定性净资产”的净资产重分类不是同一时点。</span></div>
+        <div class="map2-step"><b>期末结转后收入账户归零</b><span>限定性捐赠收入期末结转到限定性净资产；非限定性捐赠收入结转到非限定性净资产。后续时间限制到期、用途实现或捐赠人撤销限制，再把相应限定性净资产转成非限定性净资产。</span></div>
+      </div>
+      <div class="entry"><div class="entry-head">外部原因导致需要退还捐赠</div><div class="entry-grid">
+        <div class="entry-row"><span class="dc debit">借</span><span><span class="acct" tabindex="0" data-kind="收入类" data-word="捐赠收入" data-tip="民间非营利组织接受捐赠形成的收入；外部原因导致需退还时按课件冲减。" data-debit="减少" data-credit="增加">捐赠收入</span></span><span class="amount">应退金额</span></div>
+        <div class="entry-row"><span class="dc credit">贷</span><span><span class="acct" tabindex="0" data-kind="负债类" data-word="其他应付款" data-tip="已经形成、尚待支付或退还的其他款项。" data-debit="减少" data-credit="增加">其他应付款</span></span><span class="amount">同额</span></div>
+      </div></div>
+      <div class="entry"><div class="entry-head">当期预计限制会完全解除：收入内部重分类</div><div class="entry-grid">
+        <div class="entry-row"><span class="dc debit">借</span><span><span class="acct" tabindex="0" data-kind="收入类" data-word="捐赠收入——限定性收入" data-tip="受到捐赠人时间或用途限制的捐赠收入。" data-debit="减少" data-credit="增加">捐赠收入——限定性收入</span></span><span class="amount">解除限制金额</span></div>
+        <div class="entry-row"><span class="dc credit">贷</span><span><span class="acct" tabindex="0" data-kind="收入类" data-word="捐赠收入——非限定性收入" data-tip="不存在外部时间或用途限制的捐赠收入。" data-debit="减少" data-credit="增加">捐赠收入——非限定性收入</span></span><span class="amount">同额</span></div>
+      </div></div>`;
+    s.insertAdjacentElement('afterend',x);
+  }
+
 })();
