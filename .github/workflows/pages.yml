@@ -23,6 +23,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+      - name: Assemble large learning pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' src; do
+            dir="$(dirname "$src")"
+            base64 -d "$src" | gzip -dc > "$dir/learn.html"
+            rm "$src"
+          done < <(find . -path './chapter*/learn.html.gz.b64' -print0)
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload static site
