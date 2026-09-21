@@ -1,1 +1,14 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第二十章 · 学</title></head><body><p id="loading" style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif;padding:24px;color:#666">正在加载第二十章课件…</p><script>(async()=>{try{const [headRes,tailRes]=await Promise.all([fetch('learn.head.txt',{cache:'no-store'}),fetch('learn.data.txt',{cache:'no-store'})]);if(!headRes.ok)throw new Error(`learn.head.txt 加载失败（HTTP ${headRes.status}）`);if(!tailRes.ok)throw new Error(`learn.data.txt 加载失败（HTTP ${tailRes.status}）`);const head=(await headRes.text()).trim();const tail=(await tailRes.text()).trim();const b64=head+tail;if(head.length!==5613||tail.length!==19999||b64.length!==25612||!b64.startsWith('H4sI'))throw new Error('课件数据不完整，请刷新后重试');if(!('DecompressionStream' in window))throw new Error('当前浏览器版本过旧，不支持课件解压，请升级浏览器');const bin=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));const html=await new Response(new Blob([bin]).stream().pipeThrough(new DecompressionStream('gzip'))).text();if(!html.includes('第二十章')||!html.includes('标记已掌握'))throw new Error('课件内容校验失败');document.open();document.write(html);document.close()}catch(e){console.error(e);document.body.innerHTML=`<div style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif;max-width:720px;margin:40px auto;padding:24px"><h2>第二十章加载失败</h2><p>${String(e)}</p><p>请刷新页面；如果仍失败，请返回学习站首页。</p><p><a href="../index.html">← 返回学习站</a></p></div>`}})();</script></body></html>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第二十章 · 学</title></head><body><p id="loading" style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif;padding:24px;color:#666">正在加载第二十章课件…</p><script>
+(async()=>{try{
+const names=['learn.0.txt', 'learn.1.txt', 'learn.2.txt'];
+const rs=await Promise.all(names.map(n=>fetch(n,{cache:'no-store'})));
+for(let i=0;i<rs.length;i++)if(!rs[i].ok)throw new Error(`${names[i]} 加载失败（HTTP ${rs[i].status}）`);
+const b64=(await Promise.all(rs.map(r=>r.text()))).join('').replace(/\s+/g,'');
+if(!b64.startsWith('H4sI'))throw new Error('课件数据格式异常');
+if(!('DecompressionStream' in window))throw new Error('当前浏览器版本过旧，不支持课件解压，请升级浏览器');
+const bin=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));
+const html=await new Response(new Blob([bin]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
+if(!html.includes('第二十章')||!html.includes('术语提示')||!html.includes('课件例20-1'))throw new Error('课件内容校验失败');
+document.open();document.write(html);document.close();
+}catch(e){console.error(e);document.body.innerHTML=`<div style="font-family:-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif;max-width:720px;margin:40px auto;padding:24px"><h2>第二十章加载失败</h2><p>${String(e)}</p><p>请刷新页面；如果仍失败，请返回学习站首页。</p><p><a href="../index.html">← 返回学习站</a></p></div>`}})();
+</script></body></html>
