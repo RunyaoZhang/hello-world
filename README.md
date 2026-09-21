@@ -1,4 +1,12 @@
-# hello-world
-hello world training for git-hub
+# Accounting Study
 
-here are some changes
+个人会计学习站。
+
+- 每章固定分为「学」与「练」两部分
+- 「学」用于课件整理、专业术语、大白话原理、例题与知识结构
+- 「练」用于题库、逐项解释、错题记录与复习
+- 网站通过 GitHub Pages 自动部署
+
+当前内容：
+- 第十九章：租赁（练）
+- 第二十章：持有待售的非流动资产、处置组和终止经营（学）
