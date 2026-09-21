@@ -45,10 +45,13 @@ jobs:
           s=p.read_text(encoding='utf-8')
           css='<link rel="stylesheet" href="../assets/enhance.css">'
           js='<script src="../assets/enhance.js"></script>'
+          rel='<script src="../assets/relations.js"></script>'
           if 'assets/enhance.css' not in s:
               s=s.replace('</head>',css+'</head>')
           if 'assets/enhance.js' not in s:
               s=s.replace('</body>',js+'</body>')
+          if 'assets/relations.js' not in s:
+              s=s.replace('</body>',rel+'</body>')
           p.write_text(s,encoding='utf-8')
           PY
           done
