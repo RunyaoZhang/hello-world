@@ -33,4 +33,20 @@
       <div class="entry-row"><span class="dc credit">贷</span><span><span class="acct" tabindex="0" data-kind="负债类" data-word="递延所得税负债" data-tip="应纳税暂时性差异形成的未来所得税负债。" data-debit="减少" data-credit="增加">递延所得税负债</span></span><span class="amount">30</span></div>
     </div></div>`;
   anchor.insertAdjacentElement('afterend',s);
+
+  // audit22-deep-map: PDF image/table pages that text extraction can easily miss.
+  {
+    const x=document.createElement('section'); x.className='audit22-deep-map';
+    x.innerHTML=`
+      <div class="kicker">逐页复核补齐 · 规则地图</div>
+      <h2>“会计政策”到底包括什么：不是只有一个算法</h2>
+      <div class="map2-grid">
+        <div class="map2-step"><b>三层：原则 → 基础 → 具体方法</b><span>会计政策包括确认、计量和报告所采用的原则、基础和具体会计处理方法。原则是某类业务必须遵守的特定原则；基础主要指计量基础；具体方法是在准则允许范围内作出的具体选择。</span></div>
+        <div class="map2-step"><b>常见的重要会计政策</b><span>财务报表编制基础/计量基础、发出存货计价、固定资产初始计量、无形资产确认、投资性房地产后续计量、长期股权投资后续计量、非货币性资产交换计量、收入确认、借款费用资本化或费用化、外币折算、合并财务报表采用的原则与合并范围判断。</span></div>
+        <div class="map2-step"><b>政策变更不是“以前做错了”</b><span>政策变更本身属于正确政策之间的变更。追溯调整时，资产负债表科目按正常科目名称调整；影响以前年度利润的累积数进入留存收益，不使用“以前年度损益调整”。“以前年度损益调整”主要用于重要前期差错和日后调整事项。</span></div>
+        <div class="map2-step"><b>追溯调整法 4 步</b><span>①算政策变更累积影响数；②做追溯调账；③调整比较财务报表相关项目；④在附注说明。可比期间内各期按新政策重算；更早期间的累积影响调最早可比期间期初留存收益。确实不可行时，从最早可行日期未来适用。</span></div>
+      </div>`;
+    s.insertAdjacentElement('afterend',x);
+  }
+
 })();
