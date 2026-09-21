@@ -29,8 +29,13 @@ jobs:
           set -euo pipefail
           while IFS= read -r -d '' src; do
             dir="$(dirname "$src")"
-            base64 -d "$src" | gzip -dc > "$dir/learn.html"
-            rm "$src"
+            if [ -f "$src.part2" ]; then
+              cat "$src" "$src.part2" | base64 -d | gzip -dc > "$dir/learn.html"
+              rm "$src" "$src.part2"
+            else
+              base64 -d "$src" | gzip -dc > "$dir/learn.html"
+              rm "$src"
+            fi
           done < <(find . -path './chapter*/learn.html.gz.b64' -print0)
       - name: Inject learning enhancements
         shell: bash
