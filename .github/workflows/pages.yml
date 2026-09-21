@@ -54,13 +54,14 @@ jobs:
           js='<script src="../assets/enhance.js"></script>'
           js2='<script src="../assets/upgrade2.js"></script>'
           rel='<script src="../assets/relations.js"></script>'
-          audit='<script src="../assets/audit21.js"></script>'
+          audit_path=pathlib.Path(f'assets/audit{n}.js')
+          audit=f'<script src="../assets/audit{n}.js"></script>'
           if 'assets/enhance.css' not in s: s=s.replace('</head>',css+'</head>')
           if 'assets/upgrade2.css' not in s: s=s.replace('</head>',css2+'</head>')
           if 'assets/enhance.js' not in s: s=s.replace('</body>',js+'</body>')
           if 'assets/upgrade2.js' not in s: s=s.replace('</body>',js2+'</body>')
           if 'assets/relations.js' not in s: s=s.replace('</body>',rel+'</body>')
-          if n==21 and 'assets/audit21.js' not in s: s=s.replace('</body>',audit+'</body>')
+          if audit_path.exists() and f'assets/audit{n}.js' not in s: s=s.replace('</body>',audit+'</body>')
           p.write_text(s,encoding='utf-8')
           PY
           done
