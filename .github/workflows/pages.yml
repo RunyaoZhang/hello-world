@@ -78,6 +78,65 @@ jobs:
         run: |
           python3 tools/build_glossary.py
           python3 tools/build_entries.py
+      - name: Pre-deploy integrity checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import pathlib, sys
+
+          errors = []
+          root = pathlib.Path('.')
+
+          # The main failure mode we hit before: a corrupt multipart gzip can
+          # produce no usable learning page. Require every audited chapter to
+          # exist and look like a complete HTML document after assembly.
+          for n in range(21, 26):
+              page = root / f'chapter{n}' / 'learn.html'
+              if not page.exists():
+                  errors.append(f'missing {page}')
+                  continue
+              text = page.read_text(encoding='utf-8', errors='strict')
+              low = text.lower()
+              if '<html' not in low or '</html>' not in low:
+                  errors.append(f'incomplete HTML in {page}')
+              if len(text) < 1000:
+                  errors.append(f'suspiciously small {page}: {len(text)} bytes')
+
+              required = [
+                  '../assets/enhance.css',
+                  '../assets/upgrade2.css',
+                  '../assets/enhance.js',
+                  '../assets/upgrade2.js',
+                  '../assets/relations.js',
+              ]
+              for asset in required:
+                  if asset not in text:
+                      errors.append(f'{page} missing injected asset {asset}')
+
+              audit = root / 'assets' / f'audit{n}.js'
+              if audit.exists() and f'../assets/audit{n}.js' not in text:
+                  errors.append(f'{page} missing audit{n}.js injection')
+
+          for path in [
+              root/'index.html',
+              root/'assets'/'enhance.css',
+              root/'assets'/'upgrade2.css',
+              root/'assets'/'enhance.js',
+              root/'assets'/'upgrade2.js',
+              root/'assets'/'relations.js',
+          ]:
+              if not path.exists():
+                  errors.append(f'missing required site file {path}')
+
+          if errors:
+              print('PRE-DEPLOY CHECK FAILED')
+              for e in errors:
+                  print(f'::error::{e}')
+              sys.exit(1)
+
+          print('Pre-deploy integrity checks passed for chapters 21-25.')
+          PY
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload static site
