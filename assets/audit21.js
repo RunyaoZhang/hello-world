@@ -20,4 +20,17 @@
       <div class="map2-step"><b>内部现金流也不能留下</b><span>集团内部收付款在合并现金流量表中抵销，而且按实际现金金额抵：例如内部销售已收款时，增值税也属于集团内部现金流，按含税额抵销。子公司少数股东以现金增资，则是集团从外部少数股东收到资金，列筹资活动现金流。</span></div>
     </div>`;
   anchor.insertAdjacentElement('afterend',s);
+
+  // audit21-principle-gap: small but testable rules from the early PDF table pages.
+  {
+    const x=document.createElement('section'); x.className='audit21-principle-gap';
+    x.innerHTML=`
+      <div class="kicker">逐页复核补齐 · 两个边界</div>
+      <div class="map2-grid">
+        <div class="map2-step"><b>同一控制为什么坚持账面价值</b><span>集团内部重组不视为一笔新的对外购买：合并方取得的资产、负债以被合并方在最终控制方合并财务报表中的账面价值为基础，不凭内部重组产生新的资产、负债或新的商誉；最终控制方以前对外收购形成的原有商誉则继续承接。</span></div>
+        <div class="map2-step"><b>“视同期初就在一起”也有下限</b><span>同一控制下控股合并编合并报表时原则上把被合并方自合并当期期初起纳入；如果合并方的设立日晚于被合并方，则追溯起点是合并方成立日，不能追到合并方尚不存在的时期。</span></div>
+      </div>`;
+    s.insertAdjacentElement('afterend',x);
+  }
+
 })();
