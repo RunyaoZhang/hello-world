@@ -107,4 +107,12 @@
  const key=`acct_learn_${ch}_scroll`,saved=Number(sessionStorage.getItem(key)||0);
  if(saved>700){const b=document.createElement('button');b.className='resume-reading';b.type='button';b.textContent='继续上次位置';b.onclick=()=>{window.scrollTo({top:saved,behavior:'smooth'});b.remove()};document.body.append(b)}
  let t;window.addEventListener('scroll',()=>{clearTimeout(t);t=setTimeout(()=>sessionStorage.setItem(key,String(window.scrollY)),120)},{passive:true});
+
+ if(ch>=21&&ch<=25&&!document.querySelector('.review-cta')){
+   const cta=document.createElement('section');cta.className='review-cta';
+   cta.innerHTML=`<div class="kicker">学完测一下</div><h2>合上页面前，花 5 分钟自测</h2><p>主动回忆比再读一遍更能检验是否真的理解，只抓本章最容易混的分界点。</p><a href="../review.html?ch=${ch}">去自测第 ${ch} 章 →</a>`;
+   const quick=document.querySelector('#quick');
+   if(quick)quick.insertAdjacentElement('afterend',cta);
+   else (document.querySelector('main')||document.body).append(cta);
+ }
 })();
